@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import axios from 'axios';
 import { Consumer } from '../../context';
 
 
@@ -9,16 +9,19 @@ class Contact extends Component {
   state = {
     showTeamInfo: false
   };
-  onDeleteClick = (id,dispatch) => {
-   dispatch({type:'DELETE_CONTACT', payload: id});
-  }
+  onDeleteClick = async (id,dispatch) => {
+    await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`)
+
+      dispatch({type:'DELETE_CONTACT', payload: id})
+      
+  };
   onShowClick = () =>{
     this.setState({showTeamInfo:
        !this.state.showTeamInfo});
   };
   
   render() {
-    const {id,name, stack, sex } = this.props.contact;
+    const {id,name, email, stack, sex } = this.props.contact;
     const {showTeamInfo} = this.state;
     
     return (
@@ -41,6 +44,7 @@ class Contact extends Component {
               {showTeamInfo ? ( <ul className="list-group">
                 {/* <li>Name: {this.props.name}</li> */}
                 {/* <li>Email: {this.props.email}</li> */}
+                <li className="list-group-item">Email: {email}</li>
                 <li className="list-group-item">Stack: {stack}</li>
                 <li className="list-group-item">Sex: {sex}</li>
               </ul>) : null }

@@ -1,23 +1,28 @@
 import React, { Component } from 'react';
 import{ Consumer} from '../../context';
 import {TextInputGroup, SelectGroup} from '../layout/TextInputGroup';
-import uuid from 'uuid';
+import axios from 'axios';
 
 class AddContact extends Component {
   state = {
     name: '',
+    email: '',
     stack: '',
     sex: '',
     errors: {},
   };
 
   onChange =(e) => this.setState({[e.target.name]: e.target.value});
-  onSubmit = (dispatch,e) => {
+  onSubmit = async (dispatch,e) => {
     e.preventDefault();
-    const {name, stack, sex} = this.state;
+    const {name, email, stack, sex} = this.state;
 
     if(name === '') {
       this.setState({errors: { name: 'Name is required'}});
+      return;
+    }
+    if(email === '') {
+      this.setState({errors: { email: 'Email is required'}});
       return;
     }
     if(stack === '') {
@@ -32,22 +37,32 @@ class AddContact extends Component {
     const newContact = {
       // id: uuid(),
       name,
+      email,
       stack,
       sex
-    }
-    dispatch({type: 'ADD_CONTACT', payload:newContact});
+    };
+    
+    const response = await axios
+    .post('https://jsonplaceholder.typicode.com/users', 
+    newContact)
+    dispatch({type: 'ADD_CONTACT', 
+    payload: response.data})
     
     //clear form data
     this.setState ({
       name: '',
+      email: '',
       stack: '',
       sex: '',
       errors: {},
     });
+
+    this.props.history.push('/');
+
   };
 
   render() {
-    const {name, stack, sex, errors} = this.state;
+    const {name, email, stack, sex, errors} = this.state;
 
     return (
       <Consumer>
@@ -65,6 +80,16 @@ class AddContact extends Component {
                   value = {name}
                   onChange = {this.onChange}
                   error={errors.name}
+                 />
+                 
+                 <TextInputGroup 
+                  label = 'Email'
+                  name = 'email'
+                  type = 'email'
+                  placeholder = 'input email'
+                  value = {email}
+                  onChange = {this.onChange}
+                  error={errors.email}
                  />
 
                   < SelectGroup 

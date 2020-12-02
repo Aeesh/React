@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom'
 
  const Header =(props) => {
    const {fellows} = props;
@@ -12,7 +13,17 @@ import PropTypes from 'prop-types';
         <div>
           <ul className="navbar-nav mr-auto">
             <li className="nav-item">
-              <a href="https://pacetimesheet.netlify.app/new_ui_env/index.html" className="nav-link"target ="_blank">Pace</a>
+              <Link to="https://pacetimesheet.netlify.app/new_ui_env/index.html" className="nav-link"target ="_blank">Pace</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/Contact/add" className="nav-link">
+                <i className="fas fa-plus" />
+                Add</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/about" className="nav-link">
+              <i className="fas fa-question" />
+                About</Link>
             </li>
           </ul>
         </div>
